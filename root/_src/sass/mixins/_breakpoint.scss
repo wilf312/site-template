@@ -1,0 +1,68 @@
+// Media Query Breakpoint
+//
+// For modern browsers
+// 1. The space content is one way to avoid an Opera bug when the
+//    contenteditable attribute is included anywhere else in the document.
+//    Otherwise it causes space to appear at the top and bottom of elements
+//    that are clearfixed.
+// 2. The use of `table` rather than `block` is only necessary if using
+//    `:before` to contain the top-margins of child elements.
+//
+// Source: http://nicolasgallagher.com/micro-clearfix-hack/
+// @mixin sprite-width($sprite) {
+//   width: nth($sprite, 5);
+// }
+
+// @mixin sprite-height($sprite) {
+//   height: nth($sprite, 6);
+// }
+
+// @mixin sprite-position($sprite) {
+//   $sprite-offset-x: nth($sprite, 3);
+//   $sprite-offset-y: nth($sprite, 4);
+//   background-position: $sprite-offset-x  $sprite-offset-y;
+// }
+
+// @mixin sprite-image($sprite) {
+//   $sprite-image: nth($sprite, 9);
+//   background-image: url(#{$sprite-image});
+// }
+
+
+
+// mediaqueryのブレイクポイント
+// 参考 : http://davidwalsh.name/write-media-queries-sass
+// 使い方
+// p {
+//   @include smartphone {
+//     font-size: 18px;
+//   }
+//   @include desktop {
+//     font-size: 20px;
+//   }
+// }
+$break-width: $screen-sm;
+@mixin smartphone {
+  @media screen and (max-width: #{$break-width}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media screen and (min-width: #{$break-width + 1}) {
+    @content;
+  }
+}
+
+
+// ブレイクポイントJS参照用
+body:before {
+  content: "smartphone";
+  display: none; /* Prevent from displaying. */
+}
+
+@include desktop {
+  body:before {
+    content: "desktop";
+  }
+}

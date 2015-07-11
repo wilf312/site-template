@@ -1,0 +1,329 @@
+/*----------------------
+　コンテンツ別の設定値
+----------------------*/
+$baseTextColor : #000;
+
+//articleサイズ
+$articleWidth : 960px;
+$articleHeight : 540px;
+
+//画像パス
+$imgPath: "../images/";
+
+
+/* モバイルのフォント指定　*/
+@mixin mob_mincho-family {
+	font-family: "ヒラギノ明朝 ProN W3","HiraMinProN-W3",serif;
+}
+
+/*----------------------
+	mixiin
+----------------------*/
+// ベンダープレフィックスリスト
+$prefixList: -webkit-, -moz-, -ms-, -o-, null;
+
+// clearfix
+@mixin clearfix {
+	*zoom: 1;
+	&:after {
+		content: "";
+		display: block;
+		clear: both;
+	}
+}
+
+// 透明度（IE用の対応込み）
+@mixin opacity($opacity:0.6) {
+	opacity: $opacity;
+	$opacityIE: $opacity * 100;
+	filter: alpha(opacity=$opacityIE);
+}
+
+
+
+$break-width: 640px;
+@mixin desktop {
+  @media screen and (min-width: #{$break-width + 1}) {
+    @content;
+  }
+}
+@mixin smartphone {
+  @media screen and (max-width: #{$break-width}) {
+    @content;
+  }
+}
+
+@mixin hide-text() {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+
+// New mixin to use as of v3.0.1
+@mixin text-hide() {
+  @include hide-text;
+}
+
+
+@mixin clearfix() {
+  &:before,
+  &:after {
+    content: " "; // 1
+    display: table; // 2
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+
+
+@mixin imgResp( $imgPath ) {
+	height:0;
+	background: url($imgPath) left top no-repeat;
+	-webkit-background-size: cover;
+	     -o-background-size: cover;
+	        background-size: cover;
+}
+
+
+
+
+
+
+// 任意のプロパティにベンダープレフィックスをつける
+//@mixin addPrefix($propery,$value) {
+//	@each $prefix in $prefixList {
+//		#{$prefix}#{$propery}: #{$value};
+//	}
+//}
+//
+//
+//// トランジッションの指定
+//@mixin transition($properies:all,$duration:0.3s,$easing:linear,$delay : 0s) {
+//	@each $prefix in $prefixList {
+//		#{$prefix}transition: $properies $duration $easing $delay;
+//	}
+//}
+
+//// リンク時のフェードアニメーション
+//@mixin hoverFadeAnimation($duration:0.4s,$easing:$easeOutCubic,$opacity:0.6) {
+//	@include transition(opacity,$duration,$easing);
+//	&:active,
+//	&:hover,
+//	&:focus {
+//		@include opacity($opacity);
+//	}
+//}
+//// リンクエリア全体に白いカバーをつける
+//// ※ aタグに対して指定してください
+//@mixin addHoverCover($color : rgba(255,255,255,0.25) , $duration:0.5s) {
+//	display: block;
+//	&:before {
+//		position: absolute;
+//		content : ' ';
+//		top : 0;
+//		left : 0;
+//		width: 0;
+//		height: 0;
+//		@include transition(background-color , $duration ,$easeOutQuart);
+//	}
+//	&:hover:before {
+//		width: 100%;
+//		height: 100%;
+//		background: $color;
+//		z-index: 10;
+//	}
+//}
+
+//// フォントサイズの調整
+//// px → remに変換（rem非対応用にpxも指定）
+//// @param $lineSizePx px数指定（Photoshopのテキストボックスで表示される数値）省略可能
+//@mixin font-size($size, $lineSizePx : null) {
+//	$base : 13; // ベースの文字サイズ
+//	font-size: $size + px;
+//	@if $lineSizePx != null {
+//		line-height : $lineSizePx / $size;
+//	}
+//}
+
+// 表示切り替え処理
+// .showクラスの追加・削除でブロック全体をopacity表示する
+@mixin toggleShowWithFade($transitDuration : 0.4s,$transitDelay : 0s,$className : ".show") {
+	opacity: 0;
+	height: 0;
+	@include addPrefix(transition,"opacity 0.2s " + $easeInOutCirc + " " + ($transitDelay +  0s) + ",height 0.1s " + $easeInOutCirc + " " + ($transitDelay +  0.2s));
+
+	&.show {
+		opacity: 1.0;
+		height: 100%;
+		@include addPrefix(transition,"opacity 0.4s " + $easeInOutCirc + " " + ($transitDelay +  0s) + ",height 0.1s " + $easeInOutCirc + " " + ($transitDelay +  0.2s));
+	}
+}
+
+
+// 上下中央にボックスを絶対配置する
+//@mixin centerBlock($width,$height) {
+//	position: absolute;
+//	width: 300px;
+//	height: 108px;
+//	top : 50%;
+//	left : 50%;
+//	margin : -59px 0 0 -150px;
+//	text-align: center;
+//}
+
+// 要素にFadeIn/FadeOut処理を追加
+@mixin fadeInAndOut($inTime:0.2s,$outTime:0.2s,$inDelay:0s,$outDelay:0s) {
+	&.show {
+		opacity: 1.0;
+		height: 100%;
+		@include addPrefix(transition,"opacity " + $inTime + " ease-in-out " + $inDelay + ", height 0.01s " + "ease-in-out " + ($inDelay+$inTime));
+	}
+	&.hide {
+		opacity: 0;
+		height: 0;
+		overflow: hidden;
+		@include addPrefix(transition,"opacity " + $outTime + " ease-in-out " + $outDelay + ", height 0.01s ease-in-out 0s");
+	}
+}
+
+
+
+//// keyframesアニメーション関連の処理
+//// 使い方
+////@include keyframes(spinning) {
+////	0% { @include transform(rotate(360deg)); }
+////	100% { @include transform(rotate(0deg)); }
+////}
+//@mixin keyframes($name) {
+//	@-moz-keyframes #{$name} { @content; }
+//	@-webkit-keyframes #{$name} { @content; }
+//	@-o-keyframes #{$name} { @content; }
+//	@-ms-keyframes #{$name} { @content; }
+//	@keyframes #{$name} { @content; }
+//}
+//@mixin animation($animation-name) {
+//	@include addPrefix(animation,$animation-name);
+//	@include addPrefix(animation-fill-mode,both);
+//}
+
+//// Flashのスタート、終了フレームから、アニメーションタイムを取得する
+//$flashFps : 30;
+//@function getAnimationTime ($startFrameNum, $endFrameNum) {
+//	@return floor(($endFrameNum - $startFrameNum) / $flashFps * 10) / 10;
+//}
+
+
+// 数値にキャストする
+@function number($string) {
+	// Matrices
+	$strings: '0' '1' '2' '3' '4' '5' '6' '7' '8' '9';
+	$numbers:  0   1   2   3   4   5   6   7   8   9;
+
+	// Result
+	$result: 0;
+
+	// Looping through all characters
+	@for $i from 1 through str-length($string) {
+		// Do magic
+	}
+
+	@return $result;
+}
+
+
+
+@mixin backgroundFig($w,$h,$url) {
+	margin: 0 auto;
+	width: $w;
+	height: $h;
+	background: url("#{$imgPath}#{$url}") no-repeat center center;
+	background-size: $w $h;
+}
+
+
+
+// スマホ：aタグをブロックに
+@mixin blockAnchor($w,$h) {
+	display: block;
+	width: $w;
+	height: $h;
+}
+
+
+/**
+*
+* 全画面固定オーバーレイブロック（ライトボックスなどで利用）
+*
+*/
+@mixin overlayBox($width,$height,$isVisible:true,$bgColor:rgba(0,0,0,0.8)) {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top : 0;
+	left : 0;
+	background: #000;
+	background: rgba(0,0,0,0.8);
+	z-index: 30;
+	@if $isVisible == true {
+		// 何もしない
+	} @else {
+		// ON/OFF用のスタイルを追加
+		display : none;
+		&.show {
+			display : block;
+			cursor: pointer;
+		}
+	}
+	// 中のコンテンツ
+	.inner {
+		position: absolute;
+		top : 50%;
+		left : 50%;
+		width: $width;
+		height: $height;
+		margin-left : -1 * floor($width / 2);
+		margin-top : -1 * floor($height / 2);
+		cursor: auto;
+	}
+}
+
+
+
+// CSSのeasing
+// Default
+$linear: cubic-bezier(0.250, 0.250, 0.750, 0.750);
+$ease: cubic-bezier(0.250, 0.100, 0.250, 1.000);
+$ease-in: cubic-bezier(0.420, 0.000, 1.000, 1.000);
+$ease-out: cubic-bezier(0.000, 0.000, 0.580, 1.000);
+$ease-in-out: cubic-bezier(0.420, 0.000, 0.580, 1.000);
+// In
+$easeInQuad: cubic-bezier(0.550, 0.085, 0.680, 0.530);
+$easeInCubic: cubic-bezier(0.550, 0.055, 0.675, 0.190);
+$easeInQuart: cubic-bezier(0.895, 0.030, 0.685, 0.220);
+$easeInQuint: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+$easeInSine: cubic-bezier(0.470, 0.000, 0.745, 0.715);
+$easeInExpo: cubic-bezier(0.950, 0.050, 0.795, 0.035);
+$easeInCirc: cubic-bezier(0.600, 0.040, 0.980, 0.335);
+$easeInBack: cubic-bezier(0.600, -0.280, 0.735, 0.045);
+// Out
+$easeOutQuad: cubic-bezier(0.250, 0.460, 0.450, 0.940);
+$easeOutCubic: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+$easeOutQuart: cubic-bezier(0.165, 0.840, 0.440, 1.000);
+$easeOutQuint: cubic-bezier(0.230, 1.000, 0.320, 1.000);
+$easeOutSine: cubic-bezier(0.390, 0.575, 0.565, 1.000);
+$easeOutExpo: cubic-bezier(0.190, 1.000, 0.220, 1.000);
+$easeOutCirc: cubic-bezier(0.075, 0.820, 0.165, 1.000);
+$easeOutBack: cubic-bezier(0.175, 0.885, 0.320, 1.275);
+// In Out
+$easeInOutQuad: cubic-bezier(0.455, 0.030, 0.515, 0.955);
+$easeInOutCubic: cubic-bezier(0.645, 0.045, 0.355, 1.000);
+$easeInOutQuart: cubic-bezier(0.770, 0.000, 0.175, 1.000);
+$easeInOutQuint: cubic-bezier(0.860, 0.000, 0.070, 1.000);
+$easeInOutSine: cubic-bezier(0.445, 0.050, 0.550, 0.950);
+$easeInOutExpo: cubic-bezier(1.000, 0.000, 0.000, 1.000);
+$easeInOutCirc: cubic-bezier(0.785, 0.135, 0.150, 0.860);
+$easeInOutBack: cubic-bezier(0.680, -0.550, 0.265, 1.550);
