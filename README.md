@@ -15,7 +15,7 @@ git clone https://github.com/wilf312/site-template.git
 
 
 ## 実行方法
-コピーしたいフォルダに移動して、grunt-init実行
+コピーしたいフォルダに移動して実行
 grunt-init site-template
 
 
